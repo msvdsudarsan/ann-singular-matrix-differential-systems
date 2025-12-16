@@ -34,7 +34,16 @@ This approach yields mesh-free solvers that adapt naturally to stiff dynamics an
 
 ## Repository Structure
 
-
+ann-singular-matrix-differential-systems/
+├── matlab/
+│ ├── pinn_singular_perturbation.m
+│ ├── pinn_pantograph_delay.m
+│ ├── pinn_matrix_riccati.m
+│ ├── pinn_utils.m
+│ └── run_all_experiments.m
+├── results/
+├── docs/
+└── README.md                                                                                                                              
 ---
 
 ## Usage Instructions
