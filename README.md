@@ -34,36 +34,14 @@ This approach yields mesh-free solvers that adapt naturally to stiff dynamics an
 
 ## Repository Structure
 
+```text
 ann-singular-matrix-differential-systems/
 ├── matlab/
-│ ├── pinn_singular_perturbation.m
-│ ├── pinn_pantograph_delay.m
-│ ├── pinn_matrix_riccati.m
-│ ├── pinn_utils.m
-│ └── run_all_experiments.m
+│   ├── pinn_singular_perturbation.m
+│   ├── pinn_pantograph_delay.m
+│   ├── pinn_matrix_riccati.m
+│   ├── pinn_utils.m
+│   └── run_all_experiments.m
 ├── results/
 ├── docs/
-└── README.md                                                                                                                              
----
-
-## Usage Instructions
-
-1. Open MATLAB or MATLAB Online  
-2. Navigate to the `matlab/` directory  
-3. Run the scripts individually to reproduce numerical experiments  
-
-Each script is self-contained and can be executed independently.
-
----
-
-## Notes
-
-- The implementations are intended for academic and research use  
-- Users are encouraged to modify network size, training parameters, and collocation strategies  
-- The focus is on numerical behavior rather than performance benchmarking  
-
----
-
-## License
-
-This repository is shared for research and academic purposes.
+└── README.md
