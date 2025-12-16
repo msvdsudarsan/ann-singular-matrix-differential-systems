@@ -1,72 +1,36 @@
 # ann-singular-matrix-differential-systems
-Physics-Informed Neural Networks for Singular Matrix Differential Systems
-Update README
 
-# Physics-Informed Neural Networks for Singular Differential Systems
+This repository presents MATLAB implementations of Physics-Informed Neural Networks (PINNs) for the numerical solution of singular matrix differential systems.
 
-This repository contains MATLAB implementations of
-Physics-Informed Neural Networks (PINNs) for solving
-singular differential systems.
-
-The focus is on numerical solution strategies rather than
-benchmark optimization or dataset-driven learning.
+The emphasis is on physics-driven computational modeling rather than data-driven training or benchmark-oriented optimization.
 
 ---
 
 ## Problem Classes Covered
 
-The implemented examples include:
+The repository includes PINN-based solvers for the following classes of problems:
 
-- Singularly perturbed boundary value problems with boundary layers
-- Delay differential equations of pantograph type
-- Matrix-valued differential equations arising in control theory
+- Singularly perturbed boundary value problems exhibiting boundary layer behavior  
+- Pantograph-type delay differential equations  
+- Matrix-valued differential equations arising in control and dynamical systems  
 
-These problems are known to be challenging for traditional
-numerical methods due to stiffness, delay effects,
-and structural constraints.
+These problem classes are well known to be challenging for classical numerical schemes due to stiffness, delay effects, and structural constraints.
 
 ---
 
-## Methodology
+## Methodological Overview
 
-The approach follows a physics-informed learning paradigm:
+The implemented framework follows a physics-informed learning strategy:
 
-- Neural networks approximate the unknown solution
-- Governing differential equations are enforced through loss functions
-- Derivatives are computed using automatic differentiation
-- Boundary and initial conditions are embedded or penalized during training
+- Neural networks are used to approximate the unknown solution functions  
+- Governing differential equations are enforced directly through residual-based loss functions  
+- Derivatives are computed using automatic differentiation  
+- Boundary and initial conditions are imposed either through penalty terms or analytical embedding  
+- No external training data is required  
 
-No external training data is required.
+This approach yields mesh-free solvers that adapt naturally to stiff dynamics and complex solution structures.
 
 ---
 
 ## Repository Structure
 
-
----
-
-## Usage
-
-1. Open MATLAB (or MATLAB Online)
-2. Navigate to the `matlab/` directory
-3. Run the scripts individually to reproduce results
-
-All scripts are self-contained and can be executed independently.
-
----
-
-## Notes
-
-The implementations are intended for academic
-and educational purposes.
-
-Users are encouraged to modify network size,
-training parameters, and collocation strategies
-to explore problem-dependent behavior.
-
----
-
-## License
-
-This repository is shared for research and academic use.
-Add repository README
