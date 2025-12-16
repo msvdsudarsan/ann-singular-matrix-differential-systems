@@ -1,0 +1,3 @@
+Training log for matrix Riccati PINN
+Structure-preserving loss values
+
