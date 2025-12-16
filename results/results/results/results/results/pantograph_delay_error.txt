@@ -1,0 +1,2 @@
+Mean Absolute Error (MAE)
+Computed for pantograph delay system
