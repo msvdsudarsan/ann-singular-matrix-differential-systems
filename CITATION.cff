@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: "Physics-Informed Neural Networks for Singular Matrix Differential Systems"
+message: "If you use this repository, please cite the associated research work."
+authors:
+  - family-names: "Madhyannapu"
+    given-names: "Sri Venkata Durga Sudarsan"
+    orcid: "https://orcid.org/0009-0001-2126-6428"
+repository-code: "https://github.com/your-username/ann-singular-matrix-differential-systems"
+license: MIT
