@@ -1,3 +1,6 @@
+This repository provides the MATLAB implementation accompanying the paper 
+"Artificial Neural Network Solutions for Singular Matrix Differential Systems: 
+A Computational Framework".
 ann-singular-matrix-differential-systems
 
 This repository presents MATLAB implementations of Physics-Informed Neural Networks (PINNs) for the numerical solution of singular matrix differential systems.
