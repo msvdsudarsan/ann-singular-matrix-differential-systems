@@ -1,2 +1,0 @@
-Training log for pantograph delay differential equation
-PINN loss history
