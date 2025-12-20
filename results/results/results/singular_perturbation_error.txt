@@ -1,3 +1,0 @@
-Mean Absolute Error (MAE)
-Relative L2 Error
-Computed for singular perturbation benchmark
