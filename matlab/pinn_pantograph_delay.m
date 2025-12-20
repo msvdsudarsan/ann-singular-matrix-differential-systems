@@ -1,58 +1,111 @@
-%% PINN for Pantograph Delay Differential Equation
-% y'(t) = y(t) + y(t/2), y(0)=1
+function pinn_pantograph
+% =====================================================
+% Problem 2: Pantograph Equation 
+% y'(t) = a y(t) + b y(ct), t ∈ [0,1]
+% y(0) = 1
+% =====================================================
 
-clear; clc; close all;
+clc; clear;
 
-T = 1;
-alpha = 0.5;
-exact = @(t) exp(3*t/2);
+a = -1;
+b = 0.5;
+c = 0.5;
+y0 = 1;
 
-t = linspace(0,T,300)';
-dlT = dlarray(t','CB');
+% reference solution (high-accuracy RK)
+y_ref = @(t) reference_solution(t,a,b,c,y0);
 
+% collocation points
+t = linspace(0,1,200)';
+t_dl = dlarray(t','CB');
+
+% network
 layers = [
-    featureInputLayer(1,'Normalization','none')
-    fullyConnectedLayer(40)
-    tanhLayer
-    fullyConnectedLayer(40)
-    tanhLayer
-    fullyConnectedLayer(1)
+featureInputLayer(1)
+fullyConnectedLayer(50)
+tanhLayer
+fullyConnectedLayer(50)
+tanhLayer
+fullyConnectedLayer(50)
+tanhLayer
+fullyConnectedLayer(50)
+tanhLayer
+fullyConnectedLayer(1)
 ];
-
 net = dlnetwork(layers);
 
-epochs = 8000;
 lr = 1e-3;
-avgG = []; avgSq = [];
+avgGrad = [];
+avgSqGrad = [];
 
-disp('Training PINN (Problem-2)...');
+disp('Training started');
 
-for k = 1:epochs
-    [loss,grad] = dlfeval(@lossPantograph,net,dlT,alpha);
-    [net,avgG,avgSq] = adamupdate(net,grad,avgG,avgSq,k,lr);
-    if mod(k,1000)==0
-        fprintf('Epoch %d | Loss %.3e\n',k,extractdata(loss));
-    end
+for epoch = 1:3000
+[loss,grads] = dlfeval(@lossFun,net,t_dl,a,b,c,y0);
+[net,avgGrad,avgSqGrad] = adamupdate(net,grads,avgGrad,avgSqGrad,epoch,lr);
+
+if mod(epoch,300)==0
+fprintf('Epoch %d, Loss = %.3e\n',epoch,extractdata(loss));
+end
 end
 
-tTest = linspace(0,T,1000)';
-dlTTest = dlarray(tTest','CB');
-yPred = extractdata(predict(net,dlTTest))';
-yTrue = exact(tTest);
+% ---------------- Evaluation ----------------
+tt = linspace(0,1,1000)';
+raw = extractdata(predict(net,dlarray(tt','CB')));
 
-fprintf('\nMAE = %.2e\n',mean(abs(yPred-yTrue)));
-fprintf('Max Error = %.2e\n',max(abs(yPred-yTrue)));
+% ✔ CORRECT hard IC
+y_pred = y0 + tt.*raw;
+y_true = y_ref(tt);
+
+MAE = mean(abs(y_pred-y_true));
+MaxErr = max(abs(y_pred-y_true));
+
+fprintf('MAE = %.3e\n',MAE);
+fprintf('Max Error = %.3e\n',MaxErr);
 
 figure;
-plot(tTest,yTrue,'k','LineWidth',2); hold on;
-plot(tTest,yPred,'r--','LineWidth',2);
-legend('Exact','PINN'); grid on;
+plot(tt,y_true,'b','LineWidth',2); hold on;
+plot(tt,y_pred,'r--','LineWidth',1.5);
+legend('Reference','PINN');
+grid on;
 
-function [loss,grad] = lossPantograph(net,dlT,alpha)
-    y = forward(net,dlT);
-    yDelay = forward(net,alpha*dlT);
-    dy = dlgradient(sum(y,'all'),dlT);
-    res = dy - y - yDelay;
-    loss = mean(res.^2);
-    grad = dlgradient(loss,net.Learnables);
+end
+
+% =====================================================
+function [loss,grads] = lossFun(net,t,a,b,c,y0)
+
+raw = forward(net,t);
+y = y0 + t.*raw; % ✔ hard IC
+
+dy = dlgradient(sum(y,'all'),t);
+
+tc = c*t;
+raw_c = forward(net,tc);
+y_c = y0 + tc.*raw_c;
+
+res = dy - a*y - b*y_c;
+loss = mean(res.^2);
+
+grads = dlgradient(loss,net.Learnables);
+end
+
+% =====================================================
+function y = reference_solution(t,a,b,c,y0)
+
+N = 6000;
+tt = linspace(0,1,N);
+dt = tt(2)-tt(1);
+yy = zeros(1,N);
+yy(1) = y0;
+
+for k = 1:N-1
+f = @(ti,yi) a*yi + b*interp1(tt,yy,c*ti,'linear',y0);
+k1 = f(tt(k),yy(k));
+k2 = f(tt(k)+dt/2,yy(k)+dt*k1/2);
+k3 = f(tt(k)+dt/2,yy(k)+dt*k2/2);
+k4 = f(tt(k)+dt,yy(k)+dt*k3);
+yy(k+1) = yy(k) + dt*(k1+2*k2+2*k3+k4)/6;
+end
+
+y = interp1(tt,yy,t,'linear');
 end
