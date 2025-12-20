@@ -4,9 +4,7 @@ message: "If you use this software, please cite the associated paper."
 authors:
   - family-names: Sudarsan
     given-names: Madhyannapu Sri Venkata Durga
-  - family-names: Kumar
-    given-names: Pradheep
 version: 1.0.0
 date-released: 2025-01-01
-url: https://github.com/<your-username>/ann-singular-matrix-differential-systems
+url: https://github.com/msvdsudarsan/ann-singular-matrix-differential-systems
 license: MIT
