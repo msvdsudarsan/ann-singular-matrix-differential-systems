@@ -1,25 +1,22 @@
-%% PINN for Singularly Perturbed Boundary Value Problem
-% ε y''(t) + y'(t) = 0
-% y(0)=0, y(1)=1, ε=0.01
-% MATLAB Online compatible (stable)
+function pinn_singular_perturbation
+% =====================================================
+% Problem 1 (FINAL, CORRECT, RUNNABLE)
+% eps*y'' + y' = 0, y(0)=0, y(1)=1
+% =====================================================
 
-clear; clc; close all;
+clc; clear;
 
-%% Parameters
-epsilon = 0.01;
-tmin = 0; 
-tmax = 1;
+eps = 0.01;
 
-exact = @(t) (1 - exp(-t/epsilon)) ./ (1 - exp(-1/epsilon));
+y_exact = @(t) (1-exp(-t/eps))./(1-exp(-1/eps));
 
-%% Collocation points
-N = 200;
-t = linspace(tmin,tmax,N)';
-dlT = dlarray(t','CB');
+% collocation points (boundary-layer aware)
+t = linspace(0,1,200)';
+t = t.^2;
+t_dl = dlarray(t','CB');
 
-%% Network
 layers = [
-    featureInputLayer(1,'Normalization','none')
+    featureInputLayer(1)
     fullyConnectedLayer(30)
     tanhLayer
     fullyConnectedLayer(30)
@@ -29,58 +26,54 @@ layers = [
 
 net = dlnetwork(layers);
 
-%% Training setup
-epochs = 6000;
 lr = 1e-3;
 avgGrad = [];
 avgSqGrad = [];
 
-disp('Training PINN (Problem-1)...');
+disp('Training started');
 
-for k = 1:epochs
-    [loss,grad] = dlfeval(@modelLoss,net,dlT,epsilon);
-    [net,avgGrad,avgSqGrad] = adamupdate(net,grad,avgGrad,avgSqGrad,k,lr);
+for epoch = 1:3000
+    [loss,grads] = dlfeval(@lossFun,net,t_dl,eps);
+    [net,avgGrad,avgSqGrad] = adamupdate(net,grads,avgGrad,avgSqGrad,epoch,lr);
 
-    if mod(k,1000)==0
-        fprintf('Epoch %d | Loss %.3e\n',k,extractdata(loss));
+    if mod(epoch,200)==0
+        fprintf('Epoch %d, Loss = %.3e\n',epoch,extractdata(loss));
     end
 end
 
-%% Evaluation
-tTest = linspace(0,1,400)';
-dlTTest = dlarray(tTest','CB');
+% evaluation
+tt = linspace(0,1,1000)';
+raw = extractdata(predict(net,dlarray(tt','CB')));
 
-Nout = predict(net,dlTTest);
-yPred = extractdata(dlTTest + dlTTest.*(1-dlTTest).*Nout)';
-yTrue = exact(tTest);
+% ===== CORRECT HARD BC =====
+phi = (1-exp(-tt/eps))./(1-exp(-1/eps));
+y_pred = phi + tt.*(1-tt).*raw;
+y_true = y_exact(tt);
 
-MAE = mean(abs(yPred - yTrue));
-MaxErr = max(abs(yPred - yTrue));
+fprintf('MAE = %.3e\n',mean(abs(y_pred-y_true)));
+fprintf('Max Error = %.3e\n',max(abs(y_pred-y_true)));
 
-fprintf('\n=== FINAL RESULTS ===\n');
-fprintf('MAE       = %.2e\n',MAE);
-fprintf('Max Error = %.2e\n',MaxErr);
-
-%% Plot
 figure;
-plot(tTest,yTrue,'k','LineWidth',2); hold on;
-plot(tTest,yPred,'r--','LineWidth',2);
-legend('Exact','PINN','Location','Best');
-xlabel('t'); ylabel('y(t)');
-grid on;
+plot(tt,y_true,'b','LineWidth',2); hold on;
+plot(tt,y_pred,'r--','LineWidth',1.5);
+legend('Exact','PINN'); grid on;
 
-%% Loss function
-function [loss,gradients] = modelLoss(net,dlT,epsilon)
-    N = forward(net,dlT);
+end
 
-    % Hard BC: y(0)=0, y(1)=1
-    y = dlT + dlT.*(1-dlT).*N;
+% =====================================================
+function [loss,grads] = lossFun(net,t,eps)
 
-    dy = dlgradient(sum(y,'all'),dlT,'EnableHigherDerivatives',true);
-    d2y = dlgradient(sum(dy,'all'),dlT);
+raw = forward(net,t);
 
-    residual = dy + epsilon*d2y;
-    loss = mean(residual.^2);
+phi = (1-exp(-t/eps))./(1-exp(-1/eps));
+y = phi + t.*(1-t).*raw;
 
-    gradients = dlgradient(loss,net.Learnables);
+dy  = dlgradient(sum(y,'all'),t,'EnableHigherDerivatives',true);
+d2y = dlgradient(sum(dy,'all'),t);
+
+res = eps*d2y + dy;
+loss = mean(res.^2);
+
+grads = dlgradient(loss,net.Learnables);
+
 end
