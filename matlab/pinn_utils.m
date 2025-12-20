@@ -1,48 +1,20 @@
-% =====================================================
-% pinn_utils.m
-% Utility functions for PINN experiments
-% =====================================================
-
-function pinn_utils()
-% This file contains helper utilities used across PINN scripts.
-% It is not meant to be executed directly.
+function [t_fit, X_fit] = pinn_utils_generate_collocation(T, numPoints)
+% Generate collocation points uniformly
+t_fit = linspace(0, T, numPoints)';
+% If needed, add random or Chebyshev nodes here
+X_fit = t_fit; % same shape for simple 1D problems
 end
 
-% -----------------------------------------------------
-% Mean Absolute Error
-% -----------------------------------------------------
-function mae = computeMAE(y_pred,y_true)
-    y_pred = y_pred(:);
-    y_true = y_true(:);
-    mae = mean(abs(y_pred - y_true));
+function save_results(problemName, results)
+% Save results to results folder
+fname = sprintf('results_%s.mat', problemName);
+if ~exist('results','dir')
+    mkdir('results');
+end
+save(fullfile('results',fname),'results');
 end
 
-% -----------------------------------------------------
-% Maximum Absolute Error
-% -----------------------------------------------------
-function maxErr = computeMaxError(y_pred,y_true)
-    y_pred = y_pred(:);
-    y_true = y_true(:);
-    maxErr = max(abs(y_pred - y_true));
-end
-
-% -----------------------------------------------------
-% Create uniform collocation points
-% -----------------------------------------------------
-function t = uniformCollocation(T,N)
-    t = linspace(0,T,N)';
-end
-
-% -----------------------------------------------------
-% Convert vectorized NN output to matrix (Riccati)
-% -----------------------------------------------------
-function X = vec2mat(v,n)
-    X = reshape(v,n,n);
-end
-
-% -----------------------------------------------------
-% Frobenius norm of symmetry error
-% -----------------------------------------------------
-function err = symmetryError(X)
-    err = norm(X - X','fro');
+function val = structural_MAE(true_sol, pred_sol)
+% Mean absolute error over solution
+val = mean(abs(true_sol - pred_sol),'all');
 end
