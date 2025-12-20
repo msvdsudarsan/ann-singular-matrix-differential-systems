@@ -1,7 +1,7 @@
-# ANN Solutions for Singular Matrix Differential Systems
+# An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis
 
 This repository provides the **MATLAB implementation** accompanying the paper:  
-**"Artificial Neural Network Solutions for Singular Matrix Differential Systems: A Computational Framework"**
+**"An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis"**
 
 ---
 
