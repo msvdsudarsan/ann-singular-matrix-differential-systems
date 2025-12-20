@@ -1,6 +1,6 @@
 function pinn_singular_perturbation
 % =====================================================
-% Problem 1 (FINAL, CORRECT, RUNNABLE)
+% Problem 1 
 % eps*y'' + y' = 0, y(0)=0, y(1)=1
 % =====================================================
 
