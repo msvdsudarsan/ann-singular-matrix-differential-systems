@@ -1,2 +1,0 @@
-Training log for singularly perturbed system (epsilon = 0.01)
-Loss values recorded during PINN training
