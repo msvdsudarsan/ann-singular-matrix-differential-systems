@@ -1,91 +1,87 @@
-%% PINN for Matrix Riccati Differential Equation (Structure-Preserving)
-% dP/dt = -PA - A'P + PBR^{-1}B'P - Q
-% P(1) = I
-% MATLAB Online compatible
+function pinn_riccati
+% =====================================================
+% Problem 3: Matrix Riccati Differential Equation
+% X'(t) = A'X + XA - XBR^{-1}B'X + Q
+% X(0) = X0
+% =====================================================
 
-clear; clc; close all;
+clc; clear;
 
-%% System matrices
+% ---------- System matrices ----------
 A = [0 1; -2 -3];
 B = [0; 1];
 Q = eye(2);
 R = 1;
+X0 = eye(2);
+
 T = 1;
 
-%% Collocation points
-t = linspace(0,T,1000)';
-dlT = dlarray(t','CB');
+% ---------- Collocation points ----------
+t = linspace(0,T,200)';
+t_dl = dlarray(t','CB');
 
-%% Network (outputs lower-triangular entries)
+% ---------- Network ----------
 layers = [
-    featureInputLayer(1,'Normalization','none')
-    fullyConnectedLayer(50)
+    featureInputLayer(1)
+    fullyConnectedLayer(60)
     tanhLayer
-    fullyConnectedLayer(50)
+    fullyConnectedLayer(60)
     tanhLayer
-    fullyConnectedLayer(3)
+    fullyConnectedLayer(60)
+    tanhLayer
+    fullyConnectedLayer(4)   % 2x2 matrix → 4 outputs
 ];
-
 net = dlnetwork(layers);
 
-%% Training parameters
-epochs = 15000;
+% ---------- Optimizer ----------
 lr = 1e-3;
 avgGrad = [];
 avgSqGrad = [];
-Pbar = 0.01*eye(2);
 
-disp('Training PINN (Problem-3)...');
+disp('Training started');
 
-for k = 1:epochs
-    [loss,grad] = dlfeval(@modelLoss,net,dlT,A,B,Q,R,Pbar);
-    [net,avgGrad,avgSqGrad] = adamupdate(net,grad,avgGrad,avgSqGrad,k,lr);
+for epoch = 1:4000
+    [loss,grads] = dlfeval(@lossFun,net,t_dl,A,B,Q,R,X0);
+    [net,avgGrad,avgSqGrad] = adamupdate(net,grads,avgGrad,avgSqGrad,epoch,lr);
 
-    if mod(k,1500)==0
-        fprintf('Epoch %d | Loss %.3e\n',k,extractdata(loss));
+    if mod(epoch,500)==0
+        fprintf('Epoch %d, Loss = %.3e\n',epoch,extractdata(loss));
     end
 end
 
-disp('Training completed.');
+% ---------- Evaluation ----------
+tt = linspace(0,T,300)';
+raw = extractdata(predict(net,dlarray(tt','CB')));
 
-%% Evaluation
-tTest = linspace(0,T,100)';
-Ppinn = zeros(2,2,length(tTest));
-
-for i = 1:length(tTest)
-    dlTi = dlarray(tTest(i),'CB');
-    out = extractdata(forward(net,dlTi));
-    L = [out(1) 0; out(2) out(3)];
-    Ppinn(:,:,i) = L*L' + Pbar;
+X_pred = zeros(2,2,length(tt));
+for k = 1:length(tt)
+    Y = reshape(raw(:,k),2,2);
+    X_pred(:,:,k) = X0 + tt(k)*Y;   % hard IC
 end
 
-%% Plot results
-figure;
-plot(tTest,squeeze(Ppinn(1,1,:)),'r','LineWidth',2); hold on;
-plot(tTest,squeeze(Ppinn(2,2,:)),'b','LineWidth',2);
-xlabel('t'); ylabel('P_{ii}(t)');
-legend('P_{11}','P_{22}');
-grid on;
+fprintf('Training completed\n');
 
-%% ===== Loss Function =====
-function [loss,gradients] = modelLoss(net,dlT,A,B,Q,R,Pbar)
-
-loss = 0;
-
-for i = 1:size(dlT,2)
-    ti = dlT(:,i);
-    out = forward(net,ti);
-
-    L = [out(1) 0; out(2) out(3)];
-    P = L*L' + Pbar;
-
-    dP = dlgradient(sum(P,'all'),ti);
-
-    res = dP + P*A + A'*P - P*B*(1/R)*B'*P + Q;
-    loss = loss + sum(res(:).^2);
 end
 
-loss = loss/size(dlT,2);
-gradients = dlgradient(loss,net.Learnables);
+% =====================================================
+function [loss,grads] = lossFun(net,t,A,B,Q,R,X0)
+
+raw = forward(net,t);
+
+N = size(t,2);
+residual = 0;
+
+for k = 1:N
+    Y = reshape(raw(:,k),2,2);
+    X = X0 + t(k)*Y;   % hard IC
+
+    dXdt = Y;
+
+    ric = A'*X + X*A - X*B*(R\B')*X + Q;
+    residual = residual + sum((dXdt - ric).^2,'all');
+end
+
+loss = residual / N;
+grads = dlgradient(loss,net.Learnables);
 
 end
