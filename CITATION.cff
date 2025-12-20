@@ -1,9 +1,12 @@
 cff-version: 1.2.0
-title: "Physics-Informed Neural Networks for Singular Matrix Differential Systems"
-message: "If you use this repository, please cite the associated research work."
+title: "Artificial Neural Network Solutions for Singular Matrix Differential Systems: A Computational Framework"
+message: "If you use this software, please cite the associated paper."
 authors:
-  - family-names: "Madhyannapu"
-    given-names: "Sri Venkata Durga Sudarsan"
-    orcid: "https://orcid.org/0009-0001-2126-6428"
-repository-code: "https://github.com/your-username/ann-singular-matrix-differential-systems"
+  - family-names: Sudarsan
+    given-names: Madhyannapu Sri Venkata Durga
+  - family-names: Kumar
+    given-names: Pradheep
+version: 1.0.0
+date-released: 2025-01-01
+url: https://github.com/<your-username>/ann-singular-matrix-differential-systems
 license: MIT
