@@ -13,11 +13,12 @@ The codes in this directory reproduce the numerical experiments and tables repor
 Physics-Informed Neural Networks (PINNs) approximate solutions of differential equations using neural networks by enforcing the governing equations, boundary/initial conditions, and structural constraints directly in the loss function.
 
 ### Key characteristics of this framework
-- No external training data required  
-- Automatic differentiation for exact derivatives  
-- Mesh-free solution representation  
-- Hard enforcement of boundary and initial conditions  
-- Structure preservation for matrix Riccati equations  
+- No external training data required
+- Automatic differentiation for exact derivatives
+- Mesh-free solution representation
+- Hard enforcement of boundary and initial conditions
+- Structure preservation for matrix Riccati equations
+
 
 ---
 
