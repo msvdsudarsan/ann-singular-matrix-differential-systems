@@ -81,7 +81,7 @@ Key representative results include:
   PINN achieves **MAE ≈ 5.5e-06**, significantly outperforming classical RK4 methods
   with interpolation.
 
-- - **Matrix Riccati Differential Equation**  
+- **Matrix Riccati Differential Equation**  
   PINN achieves **MAE ≈ 9.97e-02** relative to an ODE45 reference solution, while
   guaranteeing symmetry and positive definiteness throughout training.
 
