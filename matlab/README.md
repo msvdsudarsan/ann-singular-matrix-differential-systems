@@ -67,7 +67,7 @@ pinn_pantograph_delay.m
 
 **Equation**
 \[
-X'(t) = A^T X + X A - X B R^{-1} B^T X + Q, \quad X(0)=I
+P'(t) = -P(t)A - A^T P(t) + P(t) B R^{-1} B^T P(t) - Q, \quad P(T)=S
 \]
 
 **Features**
