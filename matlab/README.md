@@ -27,7 +27,7 @@ Physics-Informed Neural Networks (PINNs) approximate solutions of differential e
 
 **Equation**
 \[
-\epsilon y''(t) + y'(t) = 0, \quad t \in [0,1], \quad y(0)=0,\; y(1)=1
+\epsilon y''(t) + y'(t) = 0, \quad t \in [0,1], \quad y(0)=0,\ y(1)=1
 \]
 
 **Features**
@@ -47,7 +47,7 @@ pinn_singular_perturbation.m
 
 **Equation**
 \[
-y'(t) = a\,y(t) + b\,y(\alpha t), \quad y(0)=1
+y'(t) = a\y(t) + b\y(\alpha t), \quad y(0)=1
 \]
 
 **Features**
