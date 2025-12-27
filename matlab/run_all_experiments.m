@@ -1,3 +1,4 @@
+%% 
 function run_all_experiments()
 
     fprintf('=================================================\n');
