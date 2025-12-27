@@ -49,3 +49,42 @@ The repository includes PINN solvers for the following three classes of problems
 
 ## 📌 Repository Structure
 
+matlab/
+├── pinn_singular_perturbation.m % Singularly perturbed BVP PINN
+├── pinn_pantograph_delay.m % Pantograph delay PINN
+├── pinn_matrix_riccati.m % Matrix Riccati PINN
+├── pinn_utils.m % Utility functions
+├── run_all_experiments.m % Runs all three experiments
+├── results/ % Generated numerical outputs
+└── figures/ % Generated figures used in the paper
+
+
+---
+
+## 📊 Numerical Results (Summary)
+
+The numerical results reported in the manuscript were generated using the MATLAB scripts provided in this repository.
+
+Key representative results include:
+
+- **Singularly Perturbed BVP (ε = 0.01)**  
+  Adaptive PINN achieves **MAE ≈ 7.18e-07**, improving accuracy by approximately two orders of magnitude over uniform finite differences.
+
+- **Pantograph Delay Equation**  
+  PINN achieves **MAE ≈ 1.28e-02** relative to MATLAB’s `dde23`, outperforming classical RK4 with interpolation.
+
+- **Matrix Riccati Equation**  
+  PINN achieves **MAE ≈ 3.64e-04** relative to a Magnus integrator while guaranteeing symmetry and positive definiteness throughout training.
+
+Detailed tables, figures, and performance comparisons are presented in the associated paper.
+
+---
+
+## ▶️ Usage Instructions
+
+1. Open MATLAB (R2022b or later recommended).
+2. Navigate to the `matlab/` directory.
+3. Run all experiments using:
+   ```matlab
+   run_all_experiments
+4. Figures and numerical outputs will be generated automatically.
