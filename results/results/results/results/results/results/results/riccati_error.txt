@@ -1,2 +1,0 @@
-MAE and symmetry error
-Positive definiteness verification
