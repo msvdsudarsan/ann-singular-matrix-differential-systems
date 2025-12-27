@@ -25,7 +25,7 @@ The documentation is intentionally concise and focused on explaining:
 - What classes of problems are addressed
 - How the framework is structured conceptually
 
-Detailed implementation details are provided directly within the MATLAB source files.
+Detailed implementation details are provided directly within the commented MATLAB source files.
 
 ---
 
@@ -43,3 +43,4 @@ The documentation is written for researchers with a background in:
 - Control systems or applied mathematics  
 
 No prior experience with neural networks is assumed beyond basic familiarity.
+Numerical reproducibility is ensured through fixed random seeds and standardized experiment scripts.
