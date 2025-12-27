@@ -1,8 +1,8 @@
 # PINN Framework for Singular and Matrix Differential Systems (MATLAB)
 
-This repository provides **MATLAB implementations** of a **Physics-Informed Neural Network (PINN)** framework for solving challenging differential systems, including **singularly perturbed boundary value problems**, **pantograph delay differential equations**, and **matrix Riccati differential equations** arising in **control theory**.
+This repository provides MATLAB implementations of a Physics-Informed Neural Network (PINN) framework for solving challenging differential systems, including singularly perturbed boundary value problems, pantograph delay differential equations, and matrix Riccati differential equations arising in control theory.
 
-The codes in this directory reproduce the **numerical experiments and tables** reported in the associated manuscript:
+The codes in this directory reproduce the numerical experiments and tables reported in the associated manuscript:
 
 **“An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis”**
 
@@ -87,6 +87,7 @@ pinn_matrix_riccati.m
 
 Common helper routines for collocation generation and error evaluation are provided in:
 
+
 pinn_utils.m
 
 
@@ -94,7 +95,8 @@ pinn_utils.m
 
 ## ▶️ How to Run All Experiments
 
-To reproduce **all numerical experiments reported in the paper**, run the following command in MATLAB or MATLAB Online:
+To reproduce all numerical experiments reported in the paper, run the following command in MATLAB or MATLAB Online:
 
 ```matlab
 run_all_experiments
+
