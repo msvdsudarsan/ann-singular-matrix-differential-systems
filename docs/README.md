@@ -1,4 +1,5 @@
-# Documentation
+# Documentation (Conceptual and Supplementary)
+
 
 This directory contains supplementary documentation for the MATLAB PINN framework implemented in this repository.
 
