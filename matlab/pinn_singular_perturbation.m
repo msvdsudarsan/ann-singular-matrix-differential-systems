@@ -1,4 +1,5 @@
-function pinn_singular_perturbation
+function pinn_singular_perturbation()
+rng(1);
 % =====================================================
 % Problem 1 
 % eps*y'' + y' = 0, y(0)=0, y(1)=1
