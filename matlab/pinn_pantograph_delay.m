@@ -1,4 +1,5 @@
 function pinn_pantograph_delay()
+rng(1);
 % =====================================================
 % Problem 2: Pantograph Delay Differential Equation
 % y'(t) = a y(t) + b y(alpha t),   y(0) = 1
