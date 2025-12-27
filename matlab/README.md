@@ -70,11 +70,14 @@ pinn_pantograph_delay.m
 P'(t) = -P(t)A - A^T P(t) + P(t) B R^{-1} B^T P(t) - Q, \quad P(T)=S
 \]
 
-**Features**
-- Arises from Linear Quadratic Regulator (LQR) control
-- Matrix-valued PINN output
-- Hard enforcement of initial condition
-- Structure-aware formulation suitable for control applications
+\textbf{Features}
+\begin{itemize}
+\item Arises from Linear Quadratic Regulator (LQR) control
+\item Matrix-valued PINN output
+\item Hard enforcement of terminal condition $P(T)=S$
+\item Structure-aware formulation suitable for control applications
+\end{itemize}
+
 
 **MATLAB file**
 
