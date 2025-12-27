@@ -47,7 +47,7 @@ pinn_singular_perturbation.m
 
 **Equation**
 \[
-y'(t) = a\y(t) + b\y(\alpha t), \quad y(0)=1
+y'(t) = a y(t) + b y(α t), \quad y(0)=1
 \]
 
 **Features**
