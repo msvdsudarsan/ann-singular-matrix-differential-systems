@@ -2,21 +2,21 @@
 
 This repository provides **MATLAB implementations** of a **Physics-Informed Neural Network (PINN)** framework for solving challenging differential systems, including **singularly perturbed boundary value problems**, **pantograph delay differential equations**, and **matrix Riccati differential equations** arising in **control theory**.
 
-The codes in this directory **reproduce the numerical experiments and tables reported in the associated manuscript**:
+The codes in this directory reproduce the **numerical experiments and tables** reported in the associated manuscript:
 
-> *An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis*
+**“An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis”**
 
 ---
 
 ## 📌 Overview
 
-Physics-Informed Neural Networks (PINNs) approximate the solution of differential equations using neural networks by enforcing the governing equations, boundary conditions, and structural constraints directly in the loss function.
+Physics-Informed Neural Networks (PINNs) approximate solutions of differential equations using neural networks by enforcing the governing equations, boundary/initial conditions, and structural constraints directly in the loss function.
 
-**Key characteristics of this framework:**
+### Key characteristics of this framework
 - No external training data required  
 - Automatic differentiation for exact derivatives  
 - Mesh-free solution representation  
-- Hard enforcement of boundary / initial conditions  
+- Hard enforcement of boundary and initial conditions  
 - Structure preservation for matrix Riccati equations  
 
 ---
@@ -27,7 +27,7 @@ Physics-Informed Neural Networks (PINNs) approximate the solution of differentia
 
 **Equation**
 \[
-\epsilon y''(t) + y'(t) = 0, \quad t \in [0,1], \quad y(0)=0, \; y(1)=1
+\epsilon y''(t) + y'(t) = 0, \quad t \in [0,1], \quad y(0)=0,\; y(1)=1
 \]
 
 **Features**
@@ -41,7 +41,6 @@ Physics-Informed Neural Networks (PINNs) approximate the solution of differentia
 pinn_singular_perturbation.m
 
 
-
 ---
 
 ### **Problem 2: Pantograph Delay Differential Equation**
@@ -52,7 +51,7 @@ y'(t) = a\,y(t) + b\,y(\alpha t), \quad y(0)=1
 \]
 
 **Features**
-- Proportional delay handled **directly by the network**
+- Proportional delay handled directly by the network
 - No interpolation of delayed terms
 - Hard initial condition enforcement
 - Reference solution generated via high-resolution RK4
@@ -95,17 +94,7 @@ pinn_utils.m
 
 ## ▶️ How to Run All Experiments
 
-To reproduce **all numerical experiments reported in the paper**, run:
+To reproduce **all numerical experiments reported in the paper**, run the following command in MATLAB or MATLAB Online:
 
 ```matlab
 run_all_experiments
-
-This script sequentially executes:
-
-Singularly perturbed BVP experiment
-
-Pantograph delay equation experiment
-
-Matrix Riccati equation experiment
-
-and prints training progress and error metrics to the MATLAB console.
