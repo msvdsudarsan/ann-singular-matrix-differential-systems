@@ -63,25 +63,21 @@ pinn_pantograph_delay.m
 
 ---
 
-### **Problem 3: Matrix Riccati Differential Equation**
+### **Problem 3: Matrix Riccati Differential Equation
 
-**Equation**
-\[
-P'(t) = -P(t)A - A^T P(t) + P(t) B R^{-1} B^T P(t) - Q, \quad P(T)=S
-\]
+Equation:
+P'(t) = -P(t)A - AᵀP(t) + P(t)BR⁻¹BᵀP(t) - Q,  with terminal condition P(T) = S
 
-\textbf{Features}
-\begin{itemize}
-\item Arises from Linear Quadratic Regulator (LQR) control
-\item Matrix-valued PINN output
-\item Hard enforcement of terminal condition $P(T)=S$
-\item Structure-aware formulation suitable for control applications
-\end{itemize}
+Features:
+- Arises from Linear Quadratic Regulator (LQR) control
+- Matrix-valued PINN output
+- Hard enforcement of terminal condition P(T) = S
+- Structure-aware formulation suitable for control applications
 
-
-**MATLAB file**
-
+MATLAB file:
 pinn_matrix_riccati.m
+
+
 
 
 ---
