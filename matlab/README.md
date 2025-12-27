@@ -63,7 +63,8 @@ pinn_pantograph_delay.m
 
 ---
 
-### **Problem 3: Matrix Riccati Differential Equation
+### **Problem 3: Matrix Riccati Differential Equation**
+
 
 Equation:
 P'(t) = -P(t)A - AᵀP(t) + P(t)BR⁻¹BᵀP(t) - Q,  with terminal condition P(T) = S
