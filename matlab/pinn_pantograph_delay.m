@@ -1,11 +1,12 @@
 function pinn_pantograph_delay()
 % =====================================================
-% Problem 2: Pantograph Equation
-% y'(t) = a y(t) + b y(alpha t),  y(0)=1
+% Problem 2: Pantograph Delay Differential Equation
+% y'(t) = a y(t) + b y(alpha t),   y(0) = 1
 % =====================================================
 
 clc; clear; close all;
 
+% Parameters
 a = -1;
 b = 0.5;
 alpha = 0.5;
@@ -26,12 +27,14 @@ layers = [
 ];
 net = dlnetwork(layers);
 
+% Optimizer
 lr = 1e-3;
 avgGrad = [];
 avgSqGrad = [];
 
 fprintf('Training started (Pantograph PINN)\n');
 
+% Training loop
 for epoch = 1:4000
     [loss,grads] = dlfeval(@lossFun,net,t_dl,a,b,alpha,y0);
     [net,avgGrad,avgSqGrad] = adamupdate(net,grads,avgGrad,avgSqGrad,epoch,lr);
@@ -41,46 +44,61 @@ for epoch = 1:4000
     end
 end
 
-% Evaluation
+fprintf('Pantograph training completed\n');
+
+% ================= Evaluation =================
 tt = linspace(0,1,1000)';
 raw = extractdata(predict(net,dlarray(tt','CB')));
 
-% STRONG hard IC
-y_pred = y0 + tt + tt.^2 .* raw;
+% ✅ CORRECT HARD INITIAL CONDITION (PDF MATCH)
+y_pred = y0 + tt .* raw;
 
-% Reference (RK4)
+% Reference solution (RK4)
 y_true = reference_solution(tt,a,b,alpha,y0);
 
-fprintf('MAE = %.3e\n',mean(abs(y_pred-y_true)));
-fprintf('Max Error = %.3e\n',max(abs(y_pred-y_true)));
+MAE = mean(abs(y_pred - y_true));
+MaxErr = max(abs(y_pred - y_true));
+
+fprintf('MAE = %.3e\n',MAE);
+fprintf('Max Error = %.3e\n',MaxErr);
 
 figure;
 plot(tt,y_true,'b','LineWidth',2); hold on;
 plot(tt,y_pred,'r--','LineWidth',1.5);
-legend('Reference','PINN'); grid on;
+legend('Reference','PINN');
+xlabel('t'); ylabel('y(t)');
+grid on;
 
 end
 
 % =====================================================
+% Loss Function
+% =====================================================
 function [loss,grads] = lossFun(net,t,a,b,alpha,y0)
 
 raw = forward(net,t);
-y = y0 + t + t.^2 .* raw;
 
+% ✅ Correct hard IC
+y = y0 + t .* raw;
+
+% First derivative
 dy = dlgradient(sum(y,'all'),t);
 
-tc = alpha*t;
+% Delayed term
+tc = alpha * t;
 raw_c = forward(net,tc);
-y_c = y0 + tc + tc.^2 .* raw_c;
+y_c = y0 + tc .* raw_c;
 
+% Residual
 res = dy - a*y - b*y_c;
 
-w = 1 + 5*(1-t);        % stronger near t=0
-loss = mean(w .* res.^2);
+loss = mean(res.^2);
 
 grads = dlgradient(loss,net.Learnables);
 end
 
+% =====================================================
+% Reference solution (high-resolution RK4)
 % =====================================================
 function y = reference_solution(t,a,b,alpha,y0)
 
