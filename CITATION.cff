@@ -8,3 +8,12 @@ version: 1.0.0
 date-released: 2025-01-01
 url: https://github.com/msvdsudarsan/ann-singular-matrix-differential-systems
 license: MIT
+
+preferred-citation:
+  type: article
+  title: "An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis"
+  authors:
+    - family-names: Madhyannapu
+      given-names: Sri Venkata Durga Sudarsan
+  journal: Journal of Computational and Applied Mathematics
+  year: 2025
