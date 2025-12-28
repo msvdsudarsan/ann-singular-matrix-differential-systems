@@ -58,3 +58,23 @@ matlab/
 ├── run_all_experiments.m          % Runs all experiments
 ├── results/                       % Generated numerical outputs
 └── figures/                       % Figures used in the manuscript
+
+---
+
+## Numerical Results (Summary)
+
+The numerical results reported in the JAMC manuscript were generated using the
+MATLAB scripts provided in this repository with fixed random seeds.
+
+Key representative results include:
+
+- **Singularly Perturbed BVP (ε = 0.01)**  
+  Adaptive PINN achieves **MAE ≈ 2.98 × 10⁻⁵**.
+
+- **Pantograph Delay Differential Equation**  
+  PINN achieves **MAE ≈ 1.96 × 10⁻²**.
+
+- **Matrix Riccati Differential Equation**  
+  PINN achieves **MAE ≈ 9.97 × 10⁻²**, while preserving symmetry and positive
+  definiteness throughout training.
+
