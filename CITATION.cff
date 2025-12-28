@@ -11,7 +11,7 @@ license: MIT
 
 preferred-citation:
   type: article
-  title: "An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis"
+  title: "An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Applications to Controllability Analysis"
   authors:
     - family-names: Madhyannapu
       given-names: Sri Venkata Durga Sudarsan
