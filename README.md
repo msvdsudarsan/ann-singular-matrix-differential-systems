@@ -51,14 +51,19 @@ The repository includes PINN solvers for the following three classes of problems
 
 ```text
 matlab/
-├── pinn_singular_perturbation.m   % Singularly perturbed BVP PINN
-├── pinn_pantograph_delay.m        % Pantograph delay PINN
-├── pinn_matrix_riccati.m          % Matrix Riccati PINN
-├── pinn_utils.m                   % Utility functions
-├── run_all_experiments.m          % Runs all experiments
-├── results/                       % Generated numerical outputs
-└── figures/                       % Figures used in the manuscript
+├── pinn_singular_perturbation.m % Adaptive PINN for singularly perturbed BVP
+├── pinn_pantograph_delay.m % PINN for pantograph delay equation
+├── pinn_matrix_riccati.m % Structure-preserving Riccati PINN
+├── pinn_utils.m % Shared utility functions
 
+├── compare_finite_difference.m % Finite Difference baseline (BVP)
+├── compare_uniform_pinn.m % Uniform PINN baseline (no adaptivity)
+├── compare_rk4_pantograph.m % RK4 + interpolation baseline
+├── bvp4c_singular_test.m % MATLAB bvp4c reference solver (Gap-1)
+
+├── run_all_experiments.m % Runs all PINN experiments
+├── results/ % Generated numerical outputs
+└── figures/ % Figures used in the manuscript
 ---
 
 ## Numerical Results (Summary)
