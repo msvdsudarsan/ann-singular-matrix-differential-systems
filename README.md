@@ -65,16 +65,33 @@ matlab/
 
 The numerical results reported in the JAMC manuscript were generated using the
 MATLAB scripts provided in this repository with fixed random seeds.
+For PINN-based methods, results are reported as mean ± standard deviation over
+three independent runs.
 
-Key representative results include:
+### Singularly Perturbed Boundary Value Problem (ε = 0.01)
+- Finite Difference (uniform):  
+  MAE = 8.12 × 10⁻⁴, Max Error = 3.46 × 10⁻²
+- bvp4c (adaptive MATLAB solver):  
+  MAE = 1.85 × 10⁻⁶, Max Error = 2.41 × 10⁻⁴
+- Adaptive PINN (this work):  
+  MAE = (3.11 ± 2.53) × 10⁻⁶,  
+  Max Error = (2.36 ± 2.09) × 10⁻⁵  
 
-- **Singularly Perturbed BVP (ε = 0.01)**  
-  Adaptive PINN achieves **MAE ≈ 2.98 × 10⁻⁵**.
+Notably, while `bvp4c` achieves slightly lower mean error, the adaptive PINN
+attains an order-of-magnitude smaller maximum error, indicating superior
+resolution of sharp boundary-layer features.
 
-- **Pantograph Delay Differential Equation**  
-  PINN achieves **MAE ≈ 1.96 × 10⁻²**.
+### Pantograph Delay Differential Equation
+- RK4 + interpolation baseline:  
+  MAE = 1.04 × 10⁻¹, Max Error = 2.64 × 10⁻¹
+- PINN (this work):  
+  MAE = (2.18 ± 0.07) × 10⁻²,  
+  Max Error = (1.29 ± 0.05) × 10⁻¹
 
-- **Matrix Riccati Differential Equation**  
-  PINN achieves **MAE ≈ 9.97 × 10⁻²**, while preserving symmetry and positive
-  definiteness throughout training.
+### Matrix Riccati Differential Equation
+- Structure-preserving PINN (this work):  
+  MAE = (9.84 ± 1.15) × 10⁻²  
 
+The proposed Riccati PINN guarantees symmetry and positive definiteness of the
+solution throughout training, at the cost of reduced numerical accuracy compared
+to classical solvers such as `ode45`.
