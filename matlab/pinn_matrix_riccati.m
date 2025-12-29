@@ -1,68 +1,55 @@
 function pinn_matrix_riccati()
-rng(1);
-% =====================================================
-% Problem 3: Matrix Riccati Differential Equation
-% Structure-preserving PINN (Symmetric + PD)
-% =====================================================
 
 clc; clear; close all;
 
-% ---------------- System matrices ----------------
+numRuns = 3;
+MAE_all = zeros(numRuns,1);
+
+for seed = 1:numRuns
+rng(seed);
+
+% =====================================================
+% Matrix Riccati Differential Equation
+% Structure-preserving PINN
+% =====================================================
+
 A = [0 1; -1 -0.5];
 B = [0; 1];
 Q = eye(2);
 R = 1;
-S = eye(2);        % Terminal condition
+S = eye(2);
 T = 5;
 
-% ---------------- Collocation points ----------------
 Nc = 150;
 t = linspace(0,T,Nc)';
 t_dl = dlarray(t','CB');
 
-% ---------------- Neural network ----------------
 layers = [
     featureInputLayer(1)
     fullyConnectedLayer(48)
     tanhLayer
     fullyConnectedLayer(48)
     tanhLayer
-    fullyConnectedLayer(3)   % l11, l21, l22
+    fullyConnectedLayer(3)
 ];
 net = dlnetwork(layers);
 
-% ---------------- Optimizer ----------------
 lr = 1e-3;
 epochs = 4000;
 avgGrad = [];
 avgSqGrad = [];
 
-fprintf('Training Riccati PINN\n');
-
-% ================= Training =================
 for epoch = 1:epochs
     [loss,grads] = dlfeval(@lossFun,net,t_dl,A,B,Q,R,S);
     [net,avgGrad,avgSqGrad] = adamupdate(net,grads,avgGrad,avgSqGrad,epoch,lr);
-
-    if mod(epoch,500)==0
-        fprintf('Epoch %d, Loss %.3e\n',epoch,extractdata(loss));
-    end
 end
 
-fprintf('Riccati training done\n');
-
-% ================= Evaluation =================
-fprintf('\nEvaluating Riccati PINN...\n');
-
+% ---------- Evaluation ----------
 tt = linspace(0,T,200)';
 t_dl_eval = dlarray(tt','CB');
 
-% PINN prediction
 L = extractdata(predict(net,t_dl_eval));
-
-l11 = L(1,:);
-l21 = L(2,:);
-l22 = L(3,:);
+l11 = L(1,:); l21 = L(2,:); l22 = L(3,:);
 
 P11 = l11.^2 + 1e-3;
 P12 = l11 .* l21;
@@ -73,7 +60,6 @@ for k = 1:length(tt)
     P_pinn(:,:,k) = [P11(k) P12(k); P12(k) P22(k)];
 end
 
-% ================= Reference solution (ODE45) =================
 [t_ref,P_ref_vec] = ode45(@(t,p) riccati_rhs(t,p,A,B,Q,R), flipud(tt), S(:));
 P_ref_vec = flipud(P_ref_vec);
 
@@ -82,27 +68,24 @@ for k = 1:length(tt)
     P_ref(:,:,k) = reshape(P_ref_vec(k,:),2,2);
 end
 
-% ================= MAE computation =================
 err = 0;
 for k = 1:length(tt)
     err = err + norm(P_pinn(:,:,k) - P_ref(:,:,k),'fro');
 end
-MAE = err / length(tt);
 
-fprintf('Riccati MAE (PINN vs reference) = %.3e\n', MAE);
+MAE_all(seed) = err / length(tt);
+
+end
+
+fprintf('Riccati MAE = %.3e ± %.3e\n', mean(MAE_all), std(MAE_all));
 
 end
 
 % =====================================================
-% Loss Function
-% =====================================================
 function [loss,grads] = lossFun(net,t,A,B,Q,R,S)
 
 L = forward(net,t);
-
-l11 = L(1,:);
-l21 = L(2,:);
-l22 = L(3,:);
+l11 = L(1,:); l21 = L(2,:); l22 = L(3,:);
 
 P11 = l11.^2 + 1e-3;
 P12 = l11 .* l21;
@@ -126,8 +109,6 @@ grads = dlgradient(loss,net.Learnables);
 
 end
 
-% =====================================================
-% Riccati RHS (Reference)
 % =====================================================
 function dp = riccati_rhs(~,p,A,B,Q,R)
 P = reshape(p,2,2);
