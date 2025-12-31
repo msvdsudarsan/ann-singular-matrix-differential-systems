@@ -1,60 +1,69 @@
 function pinn_pantograph_delay()
 
-clc; clear; close all;
+clc; clear;
 
 numRuns = 3;
 MAE_all = zeros(numRuns,1);
 MaxErr_all = zeros(numRuns,1);
 
 for seed = 1:numRuns
-rng(seed);
+    rng(seed);
 
-% =====================================================
-% Pantograph Delay Differential Equation
-% y'(t) = a y(t) + b y(alpha t),   y(0) = 1
-% =====================================================
+    % Parameters
+    a = -1;
+    b = 0.5;
+    alpha = 0.5;
+    y0 = 1;
 
-a = -1;
-b = 0.5;
-alpha = 0.5;
-y0 = 1;
+    % Collocation points
+    t = linspace(0,1,400)';
+    t_dl = dlarray(t','CB');
 
-t = linspace(0,1,400)';
-t_dl = dlarray(t','CB');
+    % Network
+    layers = [
+        featureInputLayer(1)
+        fullyConnectedLayer(50)
+        tanhLayer
+        fullyConnectedLayer(50)
+        tanhLayer
+        fullyConnectedLayer(1)
+    ];
+    net = dlnetwork(layers);
 
-layers = [
-    featureInputLayer(1)
-    fullyConnectedLayer(50)
-    tanhLayer
-    fullyConnectedLayer(50)
-    tanhLayer
-    fullyConnectedLayer(1)
-];
-net = dlnetwork(layers);
+    lr = 1e-3;
+    avgGrad = [];
+    avgSqGrad = [];
 
-lr = 1e-3;
-avgGrad = [];
-avgSqGrad = [];
+    % Training
+    for epoch = 1:4000
+        [loss,grads] = dlfeval(@lossFun,net,t_dl,a,b,alpha,y0);
+        [net,avgGrad,avgSqGrad] = adamupdate(net,grads,avgGrad,avgSqGrad,epoch,lr);
+    end
 
-for epoch = 1:4000
-    [loss,grads] = dlfeval(@lossFun,net,t_dl,a,b,alpha,y0);
-    [net,avgGrad,avgSqGrad] = adamupdate(net,grads,avgGrad,avgSqGrad,epoch,lr);
-end
+    % Evaluation grid
+    tt = linspace(0,1,1000)';
+    raw = extractdata(predict(net,dlarray(tt','CB')));
+    raw = raw(:);                 % FORCE column
 
-% ================= Evaluation =================
-tt = linspace(0,1,1000)';
-raw = extractdata(predict(net,dlarray(tt','CB')));
+    y_pred = y0 + tt .* raw;      % column
+    y_true = reference_solution(tt,a,b,alpha,y0); % column
 
-y_pred = y0 + tt .* raw;
-y_true = reference_solution(tt,a,b,alpha,y0);
-
-MAE_all(seed)    = mean(abs(y_pred - y_true),'all');
-MaxErr_all(seed) = max(abs(y_pred - y_true),[],'all');
-
+    MAE_all(seed)    = mean(abs(y_pred - y_true));
+    MaxErr_all(seed) = max(abs(y_pred - y_true));
 end
 
 fprintf('MAE = %.3e ± %.3e\n', mean(MAE_all), std(MAE_all));
 fprintf('Max Error = %.3e ± %.3e\n', mean(MaxErr_all), std(MaxErr_all));
+
+% ================= FIGURE =================
+figure;
+plot(tt, y_true,'k-','LineWidth',2); hold on;
+plot(tt, y_pred,'r--','LineWidth',2);
+xlabel('t'); ylabel('y(t)');
+legend('Reference','PINN','Location','best');
+title('Pantograph Delay Equation');
+grid on;
+saveas(gcf,'fig_pantograph_comparison.pdf');
 
 end
 
@@ -72,17 +81,17 @@ y_c = y0 + tc .* raw_c;
 
 res = dy - a*y - b*y_c;
 loss = mean(res.^2,'all');
-
 grads = dlgradient(loss,net.Learnables);
+
 end
 
 % =====================================================
 function y = reference_solution(t,a,b,alpha,y0)
 
 N = 6000;
-tt = linspace(0,1,N);
+tt = linspace(0,1,N)';
 dt = tt(2)-tt(1);
-yy = zeros(1,N);
+yy = zeros(N,1);
 yy(1) = y0;
 
 for k = 1:N-1
@@ -94,5 +103,5 @@ for k = 1:N-1
     yy(k+1) = yy(k) + dt*(k1+2*k2+2*k3+k4)/6;
 end
 
-y = interp1(tt,yy,t,'linear');
+y = interp1(tt,yy,t,'linear');  % column output
 end
