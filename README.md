@@ -88,10 +88,11 @@ resolution of sharp boundary-layer features.
 
 ### Pantograph Delay Differential Equation
 - RK4 + interpolation baseline:  
- MAE = (9.27 ± 5.91) × 10⁻⁴ , Max Error = (1.83 ± 8.17) × 10⁻⁴
+  MAE = 1.04 × 10⁻¹, Max Error = 2.64 × 10⁻¹
+
 - PINN (this work):  
-  MAE = (2.18 ± 0.07) × 10⁻²,  
-  Max Error = (1.29 ± 0.05) × 10⁻¹
+  MAE = (9.27 ± 5.91) × 10⁻⁴,  
+  Max Error = (1.83 ± 8.17) × 10⁻⁴
 
 ### Matrix Riccati Differential Equation
 - Structure-preserving PINN (this work):  
