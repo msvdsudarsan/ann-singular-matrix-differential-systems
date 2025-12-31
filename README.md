@@ -96,7 +96,7 @@ resolution of sharp boundary-layer features.
 
 ### Matrix Riccati Differential Equation
 - Structure-preserving PINN (this work):  
-  MAE = (9.84 ± 1.15) × 10⁻²  
+  MAE = (8.34 ± 0.73) × 10⁻²  
 
 The proposed Riccati PINN guarantees symmetry and positive definiteness of the
 solution throughout training, at the cost of reduced numerical accuracy compared
