@@ -1,103 +1,120 @@
-# An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Applications to Controllability Analysis
+# Adaptive Physics-Informed Neural Networks for Singular Matrix Differential Systems with Applications to Optimal Control Synthesis
 
-This repository provides the MATLAB implementation accompanying the paper:
+[![Paper](https://img.shields.io/badge/Journal-Advances%20in%20Engineering%20Software-blue)](https://www.sciencedirect.com/journal/advances-in-engineering-software)
+[![SSRN](https://img.shields.io/badge/Preprint-SSRN-orange)](https://ssrn.com)
+[![MATLAB](https://img.shields.io/badge/Code-MATLAB-red)](https://www.mathworks.com)
 
-**“An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Applications to Controllability Analysis”**
+## Authors
 
-The code implements Physics-Informed Neural Networks (PINNs) for solving singular and matrix differential systems arising in control theory and applied mathematics.
-
----
-
-## 📌 Overview
-
-This repository focuses on solving differential equations directly using Physics-Informed Neural Networks (PINNs) without relying on external labeled data. The governing equations, boundary or terminal conditions, and structural constraints are embedded into the training process through automatic differentiation.
-
-The implementation serves as a computational companion to the manuscript submitted to the  
-**Journal of Applied Mathematics and Computing (JAMC)**.
+- **Sri Venkata Durga Sudarsan Madhyannapu** — NRI Institute of Technology & JNTUK, Andhra Pradesh, India
+- **Pradheep Kumar S.** — SRM University AP, Andhra Pradesh, India
 
 ---
 
-## 📌 Problem Classes Covered
+## Abstract
 
-The repository includes PINN solvers for the following three classes of problems:
+This repository contains MATLAB source code for the paper submitted to *Advances in Engineering Software* (Elsevier), Manuscript ID: ADES-D-26-00359.
 
-### 1. Singularly Perturbed Boundary Value Problems
-- Problems exhibiting boundary layers due to small perturbation parameters  
-- Boundary-layer–aware collocation improves accuracy near sharp transitions  
+We develop an adaptive physics-informed neural network (PINN) framework for three representative classes of singular matrix differential systems:
 
-### 2. Pantograph Delay Differential Equations
-- Differential equations with proportional delay terms of the form \( y(\alpha t) \)  
-- PINNs avoid interpolation errors inherent in classical time-stepping solvers  
-
-### 3. Matrix Riccati Differential Equations
-- Arising in optimal control and Linear Quadratic Regulator (LQR) design  
-- A structure-preserving formulation ensures symmetry and positive definiteness  
+1. **Singularly Perturbed Boundary Value Problems** — boundary layer resolution via adaptive collocation
+2. **Pantograph Delay Differential Equations** — non-local coupling handled via continuous neural representation
+3. **Matrix Riccati Differential Equations** — structure-preserving Cholesky-type parameterization for LQR control synthesis
 
 ---
 
-## 📌 Methodological Summary
+## Repository Structure
 
-- Neural networks approximate the solution functions directly  
-- Governing differential equations are enforced via residual minimization  
-- Derivatives are computed using automatic differentiation  
-- Boundary and terminal conditions are imposed analytically via hard constraints  
-- No external training datasets are required  
-- Adaptive collocation refines points automatically in regions of rapid variation  
-- Matrix Riccati equations are handled using a structure-aware formulation  
+```
+ann-singular-matrix-differential-systems/
+│
+├── README.md                          ← This file
+│
+├── singular_bvp/
+│   ├── pinn_singular_bvp.m            ← PINN solver for singularly perturbed BVP
+│   └── adaptive_collocation.m         ← Adaptive refinement algorithm
+│
+├── pantograph_dde/
+│   ├── pinn_pantograph.m              ← PINN solver for pantograph DDE
+│   └── pantograph_dde23.m             ← MATLAB dde23 comparison solver
+│
+├── riccati/
+│   ├── pinn_riccati_structure.m       ← Structure-preserving PINN (Cholesky)
+│   └── hybrid_riccati.m              ← Hybrid PINN + ode45 refinement
+│
+├── aerospace/
+│   └── spacecraft_trajectory_6d.m    ← 6D spacecraft trajectory optimization
+│
+└── figures/
+    ├── fig_singular_bvp_comparison.pdf
+    ├── fig_pantograph_comparison.pdf
+    ├── figure_riccati_trace.pdf
+    ├── fig_loss_evolution_comparison.pdf
+    └── fig_aerospace_trajectory.pdf
+```
 
 ---
 
-## 📌 Repository Structure
+## Key Results
 
-```text
-matlab/
-├── pinn_singular_perturbation.m % Adaptive PINN for singularly perturbed BVP
-├── pinn_pantograph_delay.m % PINN for pantograph delay equation
-├── pinn_matrix_riccati.m % Structure-preserving Riccati PINN
-├── pinn_utils.m % Shared utility functions
+| Problem | Method | MAE |
+|---------|--------|-----|
+| Singularly Perturbed BVP | PINN (adaptive) | 3.11 × 10⁻⁶ |
+| Singularly Perturbed BVP | bvp4c | 1.85 × 10⁻⁶ |
+| Pantograph DDE | PINN | 9.27 × 10⁻⁴ |
+| Pantograph DDE | dde23 (MATLAB) | 1.10 × 10⁻² |
+| Pantograph DDE | RK4 + interpolation | 1.04 × 10⁻¹ |
+| Matrix Riccati | PINN + Hybrid | 2.17 × 10⁻⁵ |
+| Matrix Riccati | Symmetry error | < 10⁻¹⁵ |
 
-├── compare_finite_difference.m % Finite Difference baseline (BVP)
-├── compare_uniform_pinn.m % Uniform PINN baseline (no adaptivity)
-├── compare_rk4_pantograph.m % RK4 + interpolation baseline
-├── bvp4c_singular_test.m % MATLAB bvp4c reference solver (Gap-1)
-
-├── run_all_experiments.m % Runs all PINN experiments
-├── results/ % Generated numerical outputs
-└── figures/ % Figures used in the manuscript
 ---
 
-## Numerical Results (Summary)
+## Requirements
 
-The numerical results reported in the JAMC manuscript were generated using the
-MATLAB scripts provided in this repository with fixed random seeds.
-For PINN-based methods, results are reported as mean ± standard deviation over
-three independent runs.
+- MATLAB R2021b or later
+- Deep Learning Toolbox
+- Optimization Toolbox (for Bayesian hyperparameter tuning)
 
-### Singularly Perturbed Boundary Value Problem (ε = 0.01)
-- Finite Difference (uniform):  
-  MAE = 8.12 × 10⁻⁴, Max Error = 3.46 × 10⁻²
-- bvp4c (adaptive MATLAB solver):  
-  MAE = 1.85 × 10⁻⁶, Max Error = 2.41 × 10⁻⁴
-- Adaptive PINN (this work):  
-  MAE = (3.11 ± 2.53) × 10⁻⁶,  
-  Max Error = (2.36 ± 2.09) × 10⁻⁵  
+---
 
-Notably, while `bvp4c` achieves slightly lower mean error, the adaptive PINN
-attains an order-of-magnitude smaller maximum error, indicating superior
-resolution of sharp boundary-layer features.
+## Usage
 
-### Pantograph Delay Differential Equation
-- RK4 + interpolation baseline:  
-  MAE = 1.04 × 10⁻¹, Max Error = 2.64 × 10⁻¹
+```matlab
+% Example: Run PINN for pantograph DDE
+cd pantograph_dde/
+run pinn_pantograph.m
 
-- PINN (this work):  
-  MAE = (9.27 ± 5.91) × 10⁻⁴,  
-  Max Error = (1.83 ± 8.17) × 10⁻⁴
+% Example: dde23 comparison
+run pantograph_dde23.m
+```
 
-### Matrix Riccati Differential Equation
-- Structure-preserving PINN (this work):  
-  MAE = (8.34 ± 0.73) × 10⁻²  
+---
 
-The proposed Riccati PINN guarantees symmetry and positive definiteness of the
-solution throughout training, at the cost of reduced numerical accuracy compared
-to classical solvers such as `ode45`.
+## Citation
+
+If you use this code, please cite:
+
+```bibtex
+@article{madhyannapu2026adaptive,
+  title={Adaptive Physics-Informed Neural Networks for Singular Matrix 
+         Differential Systems with Applications to Optimal Control Synthesis},
+  author={Madhyannapu, Sri Venkata Durga Sudarsan and Pradheep Kumar, S.},
+  journal={Advances in Engineering Software},
+  year={2026},
+  note={Under Review, Manuscript ID: ADES-D-26-00359}
+}
+```
+
+---
+
+## Related Publication
+
+S.V.D.S. Madhyannapu, V.S. Putcha, G.V.S.R. Deekshitulu,
+"Equivalence of Kalman and Hewer controllability of Lyapunov matrix periodic systems,"
+*i-Manager's Journal of Mathematics*, 14(1), 2025.
+
+---
+
+## License
+
+This code is provided for academic research purposes only.
