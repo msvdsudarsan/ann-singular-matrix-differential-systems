@@ -1,4 +1,4 @@
-# Adaptive Physics-Informed Neural Networks for Singular Matrix Differential Systems
+## Adaptive Physics-Informed Neural Networks for Singular Matrix Differential Systems
 
 **Authors:** Sri Venkata Durga Sudarsan Madhyannapu¹² · Pradheep Kumar S.³
 
