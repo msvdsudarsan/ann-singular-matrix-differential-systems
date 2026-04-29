@@ -1,19 +1,25 @@
 cff-version: 1.2.0
-title: "An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Applications to Controllability Analysis"
+title: "Adaptive Physics-Informed Neural Networks for Singular Matrix Differential Systems with Algebraic Structure Preservation: Applications to Optimal Control Synthesis"
 message: "If you use this software, please cite the associated paper."
 authors:
   - family-names: Madhyannapu
     given-names: Sri Venkata Durga Sudarsan
-version: 1.0.0
-date-released: 2025-01-01
+  - family-names: S.
+    given-names: Pradheep Kumar
+version: 2.0.0
+date-released: 2026-04-29
 url: https://github.com/msvdsudarsan/ann-singular-matrix-differential-systems
 license: MIT
 
 preferred-citation:
   type: article
-  title: "An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Applications to Controllability Analysis"
+  title: "Adaptive Physics-Informed Neural Networks for Singular Matrix Differential Systems with Algebraic Structure Preservation: Applications to Optimal Control Synthesis"
   authors:
     - family-names: Madhyannapu
       given-names: Sri Venkata Durga Sudarsan
-  journal: Journal of Applied Mathematics and Computing
-  year: 2025
+    - family-names: S.
+      given-names: Pradheep Kumar
+  journal: "Engineering Applications of Artificial Intelligence"
+  year: 2026
+  note: "Under review"
+  url: "https://doi.org/10.2139/ssrn.6277631"
