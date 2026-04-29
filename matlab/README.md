@@ -1,108 +1,116 @@
-# PINN Framework for Singular and Matrix Differential Systems (MATLAB)
+# PINN Framework for Singular Matrix Differential Systems (MATLAB)
 
-This repository provides MATLAB implementations of a Physics-Informed Neural Network (PINN) framework for solving challenging differential systems, including singularly perturbed boundary value problems, pantograph delay differential equations, and matrix Riccati differential equations arising in control theory.
+This directory contains the MATLAB implementation of the adaptive Physics-Informed Neural Network (PINN) framework accompanying the manuscript:
 
-The codes in this repository reproduce the numerical experiments and tables reported in the associated manuscript:
-
-**“An Adaptive Physics-Informed Neural Network Framework for Singular Matrix Differential Systems with Application to Controllability Analysis”**
-
----
-
-## 📌 Overview
-
-Physics-Informed Neural Networks (PINNs) approximate solutions of differential equations by embedding governing equations, boundary or initial conditions, and structural constraints directly into the training loss, without requiring external data.
-
-**Key characteristics of this framework**
-- No external training data required  
-- Automatic differentiation for exact derivatives  
-- Mesh-free solution representation  
-- Hard enforcement of boundary and initial conditions  
-- Structure preservation for matrix Riccati equations  
+**"Adaptive Physics-Informed Neural Networks for Singular Matrix Differential Systems with Algebraic Structure Preservation: Applications to Optimal Control Synthesis"**  
+Sri Venkata Durga Sudarsan Madhyannapu, Pradheep Kumar S.  
+*Engineering Applications of Artificial Intelligence* (Elsevier, ISSN 0952-1976) — under review, 2026.  
+SSRN preprint: [doi:10.2139/ssrn.6277631](https://doi.org/10.2139/ssrn.6277631)
 
 ---
 
-## 📌 Problems Included
+## Overview
 
-### 🔹 Problem 1: Singularly Perturbed Boundary Value Problem
+Physics-Informed Neural Networks (PINNs) approximate solutions of differential equations by embedding the governing equations, boundary/initial conditions, and structural constraints directly into the training loss — no external data required.
 
-**Equation**
-\[
-\epsilon y''(t) + y'(t) = 0, \quad t \in [0,1], \quad y(0)=0,\ y(1)=1
-\]
-
-**Features**
-- Strong boundary layer near \( t = 0 \)  
-- Hard enforcement of boundary conditions  
-- Boundary-layer–aware collocation  
-- Automatic differentiation for first and second derivatives  
-
-**MATLAB file**
-
-
-pinn_singular_perturbation.m
-
+**Key features of this framework:**
+- Residual-adaptive collocation that concentrates points automatically near boundary layers (Algorithm 1)
+- Cholesky-type parameterisation `P = L*L'` guaranteeing exact symmetry and positive semi-definiteness for all network parameters (Theorem 2)
+- Hybrid PINN + `ode45` refinement recovering `1e-5` accuracy with machine-precision structural guarantees (Algorithm 2)
+- Proportional-delay evaluation by direct network forward pass — no interpolation
+- Automated Bayesian hyperparameter tuning
 
 ---
 
+## Problems Included
+
+### Problem 1: Singularly Perturbed Boundary Value Problem (Table 1, Fig. 1)
+
+**Equation:**  
+`eps*y''(t) + y'(t) = 0,   t in [0,1],   y(0)=0, y(1)=1,   eps=0.01`
+
+**Exact solution:** `y(t) = (1 - exp(-t/eps)) / (1 - exp(-1/eps))`
+
+**Key results:**  
+- PINN MAE = (3.11 ± 2.53) × 10⁻⁶  
+- ~65% of collocation points automatically concentrated in boundary layer  
+- 265 adaptive collocation points total
+
+**MATLAB file:** `pinn_singular_perturbation.m`
 
 ---
 
-### 🔹 Problem 2: Pantograph Delay Differential Equation
+### Problem 2: Pantograph Delay Differential Equation (Table 2, Fig. 2)
 
-**Equation**
-\[
-y'(t) = a y(t) + b y(\alpha t), \quad y(0)=1
-\]
+**Equation:**  
+`y'(t) = -y(t) + 0.5*y(0.5*t),   y(0)=1,   t in [0, 5]`
 
-**Features**
-- Proportional delay handled directly by the network  
-- No interpolation of delayed terms  
-- Hard enforcement of the initial condition  
-- Reference solution generated via high-resolution RK4  
+**Reference:** High-resolution RK4 with N = 6000 steps.
 
-**MATLAB file**
+**Key results:**  
+- PINN MAE = (9.27 ± 5.91) × 10⁻⁴  
+- More than one order of magnitude improvement over MATLAB `dde23`  
+- `y(0.5*t)` evaluated by direct network forward pass — no interpolation
 
-
-pinn_pantograph_delay.m
-
+**MATLAB files:** `pinn_pantograph_delay.m`, `pantograph_dde23.m` (dde23 baseline)
 
 ---
 
-### 🔹 Problem 3: Matrix Riccati Differential Equation
+### Problem 3: Matrix Riccati Differential Equation (Table 3, Fig. 3)
 
-**Equation**
-\[
-P'(t) = -P(t)A - A^T P(t) + P(t)BR^{-1}B^T P(t) - Q,
-\quad P(T) = S
-\]
+**Equation:**  
+`dP/dt = -P*A - A'*P + P*B*R^{-1}*B'*P - Q,   P(5) = I`
 
-**Features**
-- Arises from Linear Quadratic Regulator (LQR) control  
-- Matrix-valued PINN output  
-- Hard enforcement of terminal condition \( P(T) = S \)  
-- Structure-aware formulation suitable for control applications  
+**System:** `A = [0 1; -1 -0.5]`, `B = [0;1]`, `Q = I`, `R = 1`
 
-**MATLAB file**
+**Cholesky parameterisation:** `P_theta(t) = L_theta(t) * L_theta(t)'`  
+Guarantees symmetry and positive semi-definiteness for ALL parameter values (Theorem 2).
 
-pinn_matrix_riccati.m
+**Key results:**  
+- Standalone PINN MAE = (8.34 ± 0.73) × 10⁻²  
+- Hybrid PINN + ode45 MAE = (2.17 ± 0.31) × 10⁻⁵  
+- Symmetry error < 10⁻¹⁵ (identically zero by algebraic construction)  
+- 150 collocation points, 4000 training epochs
 
-
-
+**MATLAB file:** `pinn_matrix_riccati.m`
 
 ---
 
-## 📌 Utility Functions
+## Training Schedule (Section 3.6 of paper)
 
-Common helper routines for collocation generation and error evaluation are provided in:
-
-pinn_utils.m
-
-
+All problems use the same two-phase Adam schedule:
+- **Phase 1:** 2000 epochs, learning rate η = 10⁻³  
+- **Phase 2:** 2000 epochs, learning rate η = 10⁻⁴ (fine-tuning)  
+- **Total:** 4000 epochs
 
 ---
 
-## ▶️ How to Run All Experiments
+## How to Run All Experiments
 
-To reproduce all numerical experiments reported in the paper, run the following command in MATLAB or MATLAB Online:
+Execute the following in MATLAB R2023b (or later):
+
 ```matlab
 run_all_experiments
+```
+
+This sequentially runs all three problems and prints results alongside the paper's reported values.
+
+**Requirements:** MATLAB R2023b, Deep Learning Toolbox, Optimization Toolbox.
+
+---
+
+## File List
+
+| File | Purpose |
+|---|---|
+| `pinn_singular_perturbation.m` | Adaptive PINN for singularly perturbed BVP (Table 1) |
+| `pinn_pantograph_delay.m` | PINN for pantograph DDE with proportional delay (Table 2) |
+| `pinn_matrix_riccati.m` | Cholesky-PINN + hybrid refinement for Riccati (Table 3) |
+| `pantograph_dde23.m` | MATLAB `dde23` baseline (Table 2 comparison) |
+| `compare_finite_difference.m` | Finite difference baseline (Table 1 comparison) |
+| `bvp4c_singular_test.m` | `bvp4c` baseline (Table 1 comparison) |
+| `compare_uniform_pinn.m` | Uniform-collocation PINN baseline (Table 1 comparison) |
+| `compare_rk4_pantograph.m` | RK4 + interpolation baseline (Table 2 comparison) |
+| `loss_evolution_comparison.m` | Training loss curves (Fig. 4) |
+| `pinn_utils.m` | Shared utility functions |
+| `run_all_experiments.m` | Master script — runs all experiments |
