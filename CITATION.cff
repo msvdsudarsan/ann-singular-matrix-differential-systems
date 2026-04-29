@@ -4,9 +4,9 @@ message: "If you use this software, please cite the associated paper."
 authors:
   - family-names: Madhyannapu
     given-names: Sri Venkata Durga Sudarsan
-  - family-names: S.
-    given-names: Pradheep Kumar
-version: 2.0.0
+  - family-names: Kumar S.
+    given-names: Pradheep
+version: 1.0.0
 date-released: 2026-04-29
 url: https://github.com/msvdsudarsan/ann-singular-matrix-differential-systems
 license: MIT
@@ -17,9 +17,11 @@ preferred-citation:
   authors:
     - family-names: Madhyannapu
       given-names: Sri Venkata Durga Sudarsan
-    - family-names: S.
-      given-names: Pradheep Kumar
-  journal: "Engineering Applications of Artificial Intelligence"
+    - family-names: Kumar S.
+      given-names: Pradheep
+  journal: Engineering Applications of Artificial Intelligence
+  issn: "0952-1976"
+  publisher: Elsevier
   year: 2026
-  note: "Under review"
-  url: "https://doi.org/10.2139/ssrn.6277631"
+  status: under review
+  url: https://ssrn.com/abstract=6277631
