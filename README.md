@@ -171,7 +171,7 @@ P = L * L';  % Symmetric and positive semi-definite by construction
 end
 ```
 
-This guarantees $P_\theta(t) = P_\theta(t)^T$ and $P_\theta(t) \succeq 0$ for **all** parameter values $\theta$, independently of training convergence — the key result of Theorem 3.3 in the manuscript.
+This guarantees $P_\theta(t) = P_\theta(t)^T$ and $P_\theta(t) \succeq 0$ for **all** parameter values $\theta$, independently of training convergence — the key result of Theorem 2 in the manuscript.
 
 ---
 
