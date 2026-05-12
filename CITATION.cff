@@ -1,15 +1,33 @@
 cff-version: 1.2.0
 title: "Adaptive Physics-Informed Neural Networks for Singular Matrix Differential Systems with Algebraic Structure Preservation: Applications to Optimal Control Synthesis"
-message: "If you use this software, please cite the associated paper."
+message: "If you use this software or the associated manuscript contributes to your research, please cite using the metadata below."
+type: software
 authors:
   - family-names: Madhyannapu
     given-names: Sri Venkata Durga Sudarsan
-  - family-names: Kumar S.
-    given-names: Pradheep
-version: 1.0.0
-date-released: 2026-04-29
-url: https://github.com/msvdsudarsan/ann-singular-matrix-differential-systems
+    email: msvdsudarsan@gmail.com
+    orcid: "https://orcid.org/0009-0001-2126-6428"
+    affiliation: "Department of Mathematics, School of Sciences, Humanities and Management, Dr. RVR NRI Institute of Technology (Deemed to be University), Pothavarappadu Village, Agiripalli Mandal 521212, Vijayawada Rural, Andhra Pradesh, India"
+  - family-names: Pradheep Kumar
+    given-names: S.
+    affiliation: "School of Basic Sciences, SRM University AP, Neerukonda, Mangalagiri, Guntur 522240, Andhra Pradesh, India"
+version: 1.1.0
+date-released: "2026-05-12"
+url: "https://github.com/msvdsudarsan/ann-singular-matrix-differential-systems"
+repository-code: "https://github.com/msvdsudarsan/ann-singular-matrix-differential-systems"
 license: MIT
+keywords:
+  - physics-informed neural networks
+  - matrix Riccati equations
+  - optimal control synthesis
+  - Cholesky parameterisation
+  - structure-preserving methods
+  - pantograph delay differential equations
+  - singular perturbation
+  - adaptive collocation
+  - aerospace trajectory optimisation
+  - safety-critical control
+  - MATLAB
 
 preferred-citation:
   type: article
@@ -17,13 +35,15 @@ preferred-citation:
   authors:
     - family-names: Madhyannapu
       given-names: Sri Venkata Durga Sudarsan
-    - family-names: Kumar S.
-      given-names: Pradheep
-  journal: Engineering Applications of Artificial Intelligence
+      email: msvdsudarsan@gmail.com
+      orcid: "https://orcid.org/0009-0001-2126-6428"
+    - family-names: Pradheep Kumar
+      given-names: S.
+  journal: "Engineering Applications of Artificial Intelligence"
   issn: "0952-1976"
   publisher: Elsevier
   year: 2026
-  status: under review
-  url: https://ssrn.com/abstract=6277631
-
-
+  month: 5
+  notes: "Submitted 12 May 2026. SSRN preprint available."
+  url: "https://ssrn.com/abstract=6277631"
+  doi: "10.2139/ssrn.6277631"
