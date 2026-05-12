@@ -308,11 +308,7 @@ A companion paper has been submitted separately to a different journal with a di
 
 | | Companion JMCMS paper | Present EAAI paper |
 |--|---|---|
-| **Title** | A Physics-Informed Neural Network Approach with
-Two-Stage Optimization for Solving Two-Point Boundary Value Problems
-associated with Singular Matrix Differential Equations | Adaptive Physics-Informed Neural Networks for Singular Matrix
-Differential Systems with Algebraic Structure Preservation:
-Applications to Optimal Control Synthesis |
+| **Title** |Two-stage Adam–L-BFGS PINN for general matrix two-point BVPs | Adaptive PINN with Cholesky structure preservation |
 | **Journal** | *J. Mech. Continua Math. Sci.* (JMCMS), submitted 08 May 2026 | *Eng. Applications of AI* (EAAI), submitted 12 May 2026 |
 | **Authors** | M.S.V.D. Sudarsan · V.S. Putcha · G.V.S.R. Deekshitulu | Sri Venkata Durga Sudarsan Madhyannapu · Pradheep Kumar S. |
 | **Unique collaborators** | Putcha & Deekshitulu (not on EAAI paper) | Pradheep Kumar S. (not on JMCMS paper) |
