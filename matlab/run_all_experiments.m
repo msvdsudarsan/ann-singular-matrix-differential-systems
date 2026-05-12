@@ -1,3 +1,4 @@
+
 %% run_all_experiments.m
 %%
 %% Paper Title: "Adaptive Physics-Informed Neural Networks for Singular Matrix
@@ -18,7 +19,7 @@
 %%
 %% Journal:       Engineering Applications of Artificial Intelligence
 %%                (Elsevier), ISSN: 0952-1976
-%% Status:        Under review, 2026
+%% Status:        submitted 10 May 2026
 %% SSRN:          https://doi.org/10.2139/ssrn.6277631
 %%
 %% Run this script in MATLAB R2023b (or later) to reproduce all
@@ -59,8 +60,8 @@ function run_all_experiments()
     %% ---------------- Problem 3 ----------------
     %  Matrix Riccati Equation — Table 3, Fig. 3
     %  2x2 system, Cholesky-PINN + hybrid refinement
-    %  Target: Standalone MAE = (8.34+/-0.73)e-02,
-    %          Hybrid MAE     = (2.17+/-0.31)e-05,
+    %  Target: Standalone MAE = (1.52+/-0.18)e-01,
+    %          Hybrid MAE     = (1.48+/-0.15)e-09,
     %          Symmetry error < 1e-15 (algebraic guarantee)
     fprintf('\n>>> Problem 3: Matrix Riccati Differential Equation <<<\n');
     fprintf('    2x2 system, Cholesky parameterisation (Theorem 2)\n');
@@ -71,6 +72,11 @@ function run_all_experiments()
     fprintf('ALL EXPERIMENTS COMPLETED SUCCESSFULLY\n');
     fprintf('Results correspond to single-seed runs.\n');
     fprintf('Paper values are mean+/-std over 3 independent seeds.\n');
+    fprintf('=======================================================\n');
+    fprintf('\nTo reproduce additional paper results, run:\n');
+    fprintf('  ablation_study          --> Table 4 (ablation, all 5 configs)\n');
+    fprintf('  run_robustness_30trials --> Table 5 (30-trial robustness)\n');
+    fprintf('  spacecraft_riccati_6d   --> Figure 5 (6D aerospace, 50x speedup)\n');
     fprintf('=======================================================\n');
 
 end

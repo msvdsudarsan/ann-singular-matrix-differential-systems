@@ -12,8 +12,8 @@ function [t_fit, X_fit] = pinn_utils_generate_collocation(T, numPoints)
 %% Affiliation 3: School of Basic Sciences, SRM University AP, Neerukonda,
 %%                Mangalagiri, Guntur-522240, Andhra Pradesh, India
 %%
-%% Journal:       Neurocomputing (Elsevier), ISSN: 0925-2312
-%% Manuscript ID: NEUCOM-D-26-03849
+%% Journal:       Engineering Applications of Artificial Intelligence (Elsevier), ISSN: 0952-1976
+%% Manuscript ID: submitted 10 May 2026
 %% Status:        With Editor, 2026
 %% SSRN:          https://ssrn.com/abstract=6277631
 %% SSRN ID:       6277631 (Distributed: 02/20/2026)
