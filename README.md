@@ -2,7 +2,7 @@
 
 **Authors:** Sri Venkata Durga Sudarsan Madhyannapu¹² · Pradheep Kumar S.³
 
-¹ Freshmen Engineering Department, Dr. RVR NRI Institute of Technology (Deemed to be University), Pothavarappadu, Andhra Pradesh, India  
+¹ Department of Mathematics, School of Sciences, Humanities and Management, Dr. RVR NRI Institute of Technology (Deemed to be University), Pothavarappadu, Andhra Pradesh, India  
 ² Research Scholar, Jawaharlal Nehru Technological University Kakinada, Andhra Pradesh, India  
 ³ School of Basic Sciences, SRM University AP, Neerukonda, Mangalagiri, Guntur, Andhra Pradesh, India
 
